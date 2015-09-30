@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Autofac.Integration.Mvc;
 using Serilog;
 
 namespace ContosoUniversity.Web
@@ -20,9 +18,6 @@ namespace ContosoUniversity.Web
                 IoC.Startup();
 
                 Configure.AspMvc(IoC.Container, RouteTable.Routes, ViewEngines.Engines);
-
-                AppDomain.CurrentDomain.UnhandledException += OnCurrentDomainUnhandledException;
-                TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
             }
             catch
             {
@@ -37,22 +32,6 @@ namespace ContosoUniversity.Web
         {
             Log.Information("Application ending");
             IoC.Shutdown();
-        }
-
-        private static void OnCurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            Log.Error("An unobserved exception was thrown.", e.ExceptionObject as Exception);
-        }
-
-        private static void OnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
-        {
-            Log.Error("An unobserved exception was thrown on a TaskScheduler thread.", e.Exception);
-        }
-
-        protected void Application_Error(object sender, EventArgs e)
-        {
-            var exception = Server.GetLastError();
-            Log.Error(exception, "An unhandled exception was thrown: {Message}.", exception.Message);
         }
     }
 }
