@@ -9,6 +9,7 @@ namespace ContosoUniversity.Web
         public static void Routing(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
             UseAttributeRouting(routes);
         }
 
