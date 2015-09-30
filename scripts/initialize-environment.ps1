@@ -10,10 +10,14 @@ if (!(Test-AdminPrivilege))
     throw "This script must be run as an administrator"
 }
 
+if (!(Test-Service -Name "W3SVC"))
+{
+    throw "The W3SVC service does not exist, is IIS installed?"
+}
+
 # //////////////////////////////////////////////////////////////////////
 # // GLOBAL VARIABLES
 # //////////////////////////////////////////////////////////////////////
-
 
 $siteName = "ContosoUniversity"
 $domain = "contosouniversity.localtest.me"
