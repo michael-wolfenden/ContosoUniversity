@@ -59,6 +59,26 @@
       <HintPath>..\packages\ConfigInjector.1.1.0.175\lib\net45\ConfigInjector.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FluentValidation, Version=5.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.5.6.2.0\lib\Net45\FluentValidation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Glimpse.AspNet, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Glimpse.AspNet.1.8.0\lib\net45\Glimpse.AspNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Glimpse.Core, Version=1.8.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Glimpse.1.8.2\lib\net45\Glimpse.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Glimpse.Mvc5, Version=1.5.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Glimpse.Mvc5.1.5.3\lib\net45\Glimpse.Mvc5.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MediatR, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MediatR.2.0.2\lib\net45\MediatR.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -136,6 +156,7 @@
     </Compile>
     <Compile Include="AutofacModules\ConfigurationModule.cs" />
     <Compile Include="AutofacModules\LoggerModule.cs" />
+    <Compile Include="AutofacModules\MediatrModule.cs" />
     <Compile Include="AutofacModules\WebModule.cs" />
     <Compile Include="ConfigurationSettings\EnvironmentSetting.cs" />
     <Compile Include="ConfigurationSettings\MinimumLogLevelSetting.cs" />
@@ -146,17 +167,28 @@
     <Compile Include="Configure\ViewEngines.cs" />
     <Compile Include="Configure\Routing.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Features\Home\HomeController.cs" />
+    <Compile Include="Features\Students\Create.cs" />
+    <Compile Include="Features\Students\Index.cs" />
+    <Compile Include="Features\Students\StudentsController.cs" />
+    <Compile Include="GlimpseSecurityPolicy.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\AspMvc\FeatureViewLocationRazorViewEngine.cs" />
     <Compile Include="Infrastructure\ErrorHandling\ErrorHandlingModule.cs" />
+    <Compile Include="Infrastructure\Mediatr\AutofacMediatorBuilder.cs" />
+    <Compile Include="Infrastructure\Mediatr\Decorators\ValidationRequestHandler.cs" />
     <Compile Include="IoC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\web.config" />
+    <Content Include="Features\web.config" />
     <Content Include="packages.config" />
+    <Content Include="Features\Shared\_Layout.cshtml" />
+    <Content Include="Features\Home\Index.cshtml" />
+    <Content Include="Features\Students\Index.cshtml" />
+    <Content Include="Features\Students\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -164,9 +196,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -1,0 +1,21 @@
+﻿@using ContosoUniversity.Web.Features.Students
+@model Create.Command
+
+@{ ViewBag.Title = "Create"; }
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Student</h4>
+        <hr />
+        @Html.TextBoxFor(m => m.LastName)
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}

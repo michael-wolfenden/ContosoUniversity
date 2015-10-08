@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using ContosoUniversity.Web.Infrastructure.AspMvc;
 
 // ReSharper disable once CheckNamespace
 namespace ContosoUniversity.Web
@@ -7,14 +8,13 @@ namespace ContosoUniversity.Web
     {
         public static void ViewEngines(ViewEngineCollection views)
         {
-            RemoveWebFormsViewEngine(views);
+            AddFeatureViewViewEngine(views);
         }
 
-        // PERF: remove unused web forms view engine
-        private static void RemoveWebFormsViewEngine(ViewEngineCollection views)
+        private static void AddFeatureViewViewEngine(ViewEngineCollection views)
         {
             views.Clear();
-            views.Add(new RazorViewEngine());
+            views.Add(new FeatureViewLocationRazorViewEngine());
         }
     }
 }
