@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using MediatR;
 
@@ -23,10 +24,20 @@ namespace ContosoUniversity.Web.Features.Students
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Create")]
         public async Task<ActionResult> Create(Create.Command command)
         {
+            throw new DivideByZeroException();
             await _mediator.SendAsync(command);
             return View();
         }
+
+        [HttpGet]
+        [Route("Create")]
+        public ActionResult Create()
+        {
+            return View(new Create.Command());
+        }
+
     }
 }

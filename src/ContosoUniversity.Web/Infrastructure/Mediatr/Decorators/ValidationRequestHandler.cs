@@ -48,7 +48,7 @@ namespace ContosoUniversity.Web.Infrastructure.Mediatr.Decorators
 
             if (validator != null)
             {
-                await validator.ValidateAsync(message);
+                await validator.ValidateAndThrowAsync(message);
             }
 
             var response = await _innerHandler.Handle(message);

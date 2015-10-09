@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Optimization;
 using System.Web.Routing;
 using Serilog;
 
@@ -17,7 +18,7 @@ namespace ContosoUniversity.Web
 
                 IoC.Startup();
 
-                Configure.AspMvc(IoC.Container, RouteTable.Routes, ViewEngines.Engines);
+                Configure.AspMvc(IoC.Container, RouteTable.Routes, ViewEngines.Engines, BundleTable.Bundles, GlobalFilters.Filters);
             }
             catch
             {

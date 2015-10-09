@@ -28,7 +28,7 @@ namespace ContosoUniversity.Web.Features.Students
         {
             protected override Task HandleCore(Command message)
             {
-                throw new NotImplementedException();
+                return Task.CompletedTask;
             }
         }
     }

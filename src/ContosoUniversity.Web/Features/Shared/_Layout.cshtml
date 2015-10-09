@@ -1,10 +1,17 @@
-﻿<!DOCTYPE html>
+﻿@using System.Web.Optimization
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>@ViewBag.Title - Contoso University</title>
 </head>
 <body>
-    @RenderBody()
+@RenderBody()
+@Scripts.Render("~/bundles/vendor")
+@Scripts.Render("~/bundles/app")
+<script>
+contosoUniversity.shared.initialise();
+@RenderSection("scripts", false)
+</script>
 </body>
 </html>
