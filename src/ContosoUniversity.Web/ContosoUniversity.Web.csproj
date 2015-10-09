@@ -171,7 +171,6 @@
     <Compile Include="Features\Students\Create.cs" />
     <Compile Include="Features\Students\Index.cs" />
     <Compile Include="Features\Students\StudentsController.cs" />
-    <Compile Include="GlimpseSecurityPolicy.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
