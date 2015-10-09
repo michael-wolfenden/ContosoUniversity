@@ -27,7 +27,6 @@ namespace ContosoUniversity.Web.Features.Students
         [Route("Create")]
         public async Task<ActionResult> Create(Create.Command command)
         {
-            throw new DivideByZeroException();
             await _mediator.SendAsync(command);
             return View();
         }
