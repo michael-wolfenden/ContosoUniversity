@@ -197,9 +197,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\AspMvc\FeatureViewLocationRazorViewEngine.cs" />
+    <Compile Include="Infrastructure\AspMvc\JsonNetResult.cs" />
+    <Compile Include="Infrastructure\ErrorHandling\AjaxError.cs" />
     <Compile Include="Infrastructure\ErrorHandling\ErrorHandlingModule.cs" />
     <Compile Include="Infrastructure\ErrorHandling\HandleAjaxError.cs" />
-    <Compile Include="Infrastructure\ErrorHandling\HandleAjaxValidationError.cs" />
     <Compile Include="Infrastructure\Mediatr\AutofacMediatorBuilder.cs" />
     <Compile Include="Infrastructure\Mediatr\Decorators\ValidationRequestHandler.cs" />
     <Compile Include="IoC.cs" />

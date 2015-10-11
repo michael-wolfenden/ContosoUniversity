@@ -1,5 +1,5 @@
-﻿using System.Net;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using ContosoUniversity.Web.Infrastructure.AspMvc;
 using Serilog;
 
 namespace ContosoUniversity.Web.Infrastructure.ErrorHandling
@@ -14,24 +14,21 @@ namespace ContosoUniversity.Web.Infrastructure.ErrorHandling
             if (!request.IsAjaxRequest()) return;
 
             var exception = filterContext.Exception;
+            var includeStackTrace = !filterContext.HttpContext.IsCustomErrorEnabled;
+            var ajaxError = AjaxError.FromException(exception, includeStackTrace);
 
-            Log.Error(exception, "An ajax error occured [{HttpMethod} {Url}]", request.HttpMethod, request.Url);
+            if (ajaxError.ShouldLog)
+            {
+                Log.Error(exception, "An unhandled exception was thrown: {ErrorMessage}.", exception.Message);
+            }
 
-            // do not leak sensitive information in higher environments
-            var errorMessage = filterContext.HttpContext.IsCustomErrorEnabled
-                ? "An exception has occured"
-                : exception.Message;
-
-            filterContext.Result = new JsonResult
+            filterContext.Result = new JsonNetResult()
             {
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                Data = new
-                {
-                    message = errorMessage
-                }
+                Data = ajaxError
             };
 
-            filterContext.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            filterContext.HttpContext.Response.StatusCode = (int) ajaxError.StatusCode;
             filterContext.ExceptionHandled = true;
         }
     }

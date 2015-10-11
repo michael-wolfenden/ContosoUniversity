@@ -8,8 +8,7 @@ namespace ContosoUniversity.Web
     {
         public static void GlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleAjaxValidationError(), 2);
-            filters.Add(new HandleAjaxError(), 1);
+            filters.Add(new HandleAjaxError());
         }
     }
 }
