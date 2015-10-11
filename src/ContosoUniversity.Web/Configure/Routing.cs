@@ -9,6 +9,8 @@ namespace ContosoUniversity.Web
         public static void Routing(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            routes.AppendTrailingSlash = true;
+            routes.LowercaseUrls = true;
 
             UseAttributeRouting(routes);
         }
