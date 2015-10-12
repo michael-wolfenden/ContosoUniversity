@@ -16,6 +16,7 @@ namespace ContosoUniversity.Web
             Configure.Bundles(bundles);
             Configure.GlobalFilters(filters);
             Configure.AntiForgeryTokens();
+            Configure.ChameleonForms();
 
             // remove X-AspNetMvc-Version header
             MvcHandler.DisableMvcResponseHeader = true;

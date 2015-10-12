@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
@@ -10,6 +11,7 @@ namespace ContosoUniversity.Web.Features.Students
         public class Command : IAsyncRequest
         {
             public string LastName { get; set; }
+            [Display(Name = "First Name")]
             public string FirstMidName { get; set; }
             public DateTime? EnrollmentDate { get; set; }
         }

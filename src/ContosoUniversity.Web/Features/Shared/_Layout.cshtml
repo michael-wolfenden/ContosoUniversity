@@ -4,14 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <title>@ViewBag.Title - Contoso University</title>
+    @Styles.Render("~/bundles/appcss")
 </head>
 <body>
-@RenderBody()
-@Scripts.Render("~/bundles/vendor")
-@Scripts.Render("~/bundles/app")
+
+<div class="container">
+    @RenderBody()
+</div>
+
+@Scripts.Render("~/bundles/vendorjs")
+@Scripts.Render("~/bundles/appjs")
+
 <script>
-contosoUniversity.shared.initialise();
-@RenderSection("scripts", false)
+    contosoUniversity.shared.initialise();
+    @RenderSection("scripts", false)
 </script>
 </body>
 </html>

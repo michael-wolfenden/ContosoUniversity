@@ -3,19 +3,18 @@
 
 @{ ViewBag.Title = "Create"; }
 
-@using (Html.BeginForm())
+@using (var f = Html.BeginChameleonForm())
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>Student</h4>
-        <hr />
-        @Html.TextBoxFor(m => m.LastName)
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
+    using (var s = f.BeginSection())
+    {
+        @s.FieldFor(m => m.LastName)
+        @s.FieldFor(m => m.FirstMidName)
+        @s.FieldFor(m => m.EnrollmentDate)
+    }
+    using (var n = f.BeginNavigation())
+    {
+        @n.Submit("Create")
+    }
 }

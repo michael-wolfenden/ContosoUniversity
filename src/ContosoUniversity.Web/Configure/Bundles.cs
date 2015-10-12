@@ -7,14 +7,24 @@ namespace ContosoUniversity.Web
     {
         public static void Bundles(BundleCollection bundles)
         {
-            System.Web.Optimization.BundleTable.EnableOptimizations = true;
+            RegisterJsBundles(bundles);
+            RegisterCssBundles(bundles);
+        }
 
+        private static void RegisterCssBundles(BundleCollection bundles)
+        {
+            bundles.Add(new StyleBundle("~/bundles/appcss")
+                .Include("~/assets/css/bootstrap.css")
+            );
+        }
 
-            bundles.Add(new ScriptBundle("~/bundles/vendor")
-                .Include("~/Assets/vendor/jquery-2.1.4.js")
+        private static void RegisterJsBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/bundles/vendorjs")
+                .Include("~/assets/js/jquery-2.1.4.js")
             );
 
-            bundles.Add(new ScriptBundle("~/bundles/app")
+            bundles.Add(new ScriptBundle("~/bundles/appjs")
                 .IncludeDirectory("~/Features/", "*.js", searchSubdirectories: true)
             );
         }

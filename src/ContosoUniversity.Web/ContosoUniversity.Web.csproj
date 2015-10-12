@@ -60,6 +60,10 @@
       <HintPath>..\packages\AutofacSerilogIntegration.1.0.8\lib\net45\AutofacSerilogIntegration.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ChameleonForms, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ChameleonForms.1.2.0.16\lib\NET40\ChameleonForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="ConfigInjector, Version=1.1.0.175, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ConfigInjector.1.1.0.175\lib\net45\ConfigInjector.dll</HintPath>
       <Private>True</Private>
@@ -78,6 +82,10 @@
     </Reference>
     <Reference Include="Glimpse.Mvc5, Version=1.5.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Glimpse.Mvc5.1.5.3\lib\net45\Glimpse.Mvc5.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Humanizer, Version=1.28.0.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Humanizer.1.28.0\lib\portable-win+net40+sl50+wp8+wpa81\Humanizer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MediatR, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -133,6 +141,10 @@
       <HintPath>..\packages\ThirdDrawer.1.0.1.3\lib\net40\ThirdDrawer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="WebActivator, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivator.1.5\lib\net40\WebActivator.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
       <Private>True</Private>
@@ -164,7 +176,8 @@
   <ItemGroup>
     <Content Include="500.html" />
     <Content Include="404.html" />
-    <Content Include="assets\vendor\jquery-2.1.4.js" />
+    <Content Include="assets\css\bootstrap.css" />
+    <Content Include="assets\js\jquery-2.1.4.js" />
     <Content Include="Features\Shared\shared.js" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">
@@ -180,6 +193,7 @@
     <Compile Include="AutofacModules\MediatrModule.cs" />
     <Compile Include="AutofacModules\ValidatorModule.cs" />
     <Compile Include="AutofacModules\WebModule.cs" />
+    <Compile Include="Configure\ChameleonForms.cs" />
     <Compile Include="Configure\Bundles.cs" />
     <Compile Include="ConfigurationSettings\EnvironmentSetting.cs" />
     <Compile Include="ConfigurationSettings\MinimumLogLevelSetting.cs" />
