@@ -1,41 +1,34 @@
-﻿(window.contosoUniversity = window.contosoUniversity || {}).shared = (function (document, reqwest) {
+﻿(window.contosoUniversity = window.contosoUniversity || {}).shared = (function (document, $) {
 
     var _ajaxifyForms = function () {
-        var formsToAjaxify = document.querySelectorAll('form[method=post]:not(.js-no-ajax)');
-        [].forEach.call(formsToAjaxify, _ajaxifyForm);
-    }
+        $('form[method=post]:not(.js-no-ajax)')
+            .on('submit', function () {
+                var $form = $(this);
+                var submitButton = $form.find('[type="submit"]:first');
+                var data = $form.serialize();
+                var url = $form.prop('action');
 
-    var _ajaxifyForm = function (form) {
-        var submitButton = form.querySelectorAll('[type="submit"]')[0];
+                submitButton.prop('disabled', true);
 
-        function disableSubmitButton() {
-            submitButton.setAttribute('disabled', 'disabled');
-        }
+                $.ajax({
+                    method: 'POST',
+                    url: url,
+                    data: data,
+                })
+                .done(function () {
+                    alert("success");
+                })
+                .fail(function () {
+                    alert("error");
+                })
+                .always(function () {
+                    submitButton.prop('disabled', false);
+                    alert("complete");
+                });
 
-        function enableSubmitButton() {
-            submitButton.removeAttribute('disabled');
-        }
 
-        function onSubmit(event) {
-            event.preventDefault();
-
-            disableSubmitButton();
-
-            reqwest({
-                url: form.getAttribute('action'),
-                type: 'json',
-                method: 'post',
-                data: reqwest.serialize(form),
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-            .then(function (resp) { })
-            .fail(function (err, msg) { })
-            .always(enableSubmitButton)
-        }
-
-        form.addEventListener('submit', onSubmit);
+                return false;
+            });
     }
 
     var initialise = function () {
@@ -46,4 +39,4 @@
         initialise: initialise
     };
 
-})(document, window.reqwest);
+})(document, window.jQuery);
