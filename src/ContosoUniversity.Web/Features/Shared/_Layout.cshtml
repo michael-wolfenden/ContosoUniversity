@@ -1,23 +1,25 @@
 ﻿@using System.Web.Optimization
-<!DOCTYPE html>
-<html lang="en">
+
+<!doctype html>
+<html lang="en-AU">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>@ViewBag.Title - Contoso University</title>
-    @Styles.Render("~/bundles/appcss")
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 
-<div class="container">
-    @RenderBody()
-</div>
+    <div class="container">
+        @RenderBody()
+    </div>
 
-@Scripts.Render("~/bundles/vendorjs")
-@Scripts.Render("~/bundles/appjs")
+    @Scripts.Render("~/bundles/vendorjs")
+    @Scripts.Render("~/bundles/appjs")
 
-<script>
+    <script>
     contosoUniversity.shared.initialise();
     @RenderSection("scripts", false)
-</script>
+    </script>
 </body>
 </html>
