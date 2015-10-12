@@ -8,9 +8,13 @@ namespace ContosoUniversity.Web
     {
         public static void Routing(RouteCollection routes)
         {
-            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            // Improve SEO by stopping duplicate URL's due to case differences or trailing slashes.
+            // See http://googlewebmastercentral.blogspot.co.uk/2010/04/to-slash-or-not-to-slash.html
             routes.AppendTrailingSlash = true;
             routes.LowercaseUrls = true;
+
+            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            routes.IgnoreRoute("assets/{*pathInfo}");
 
             UseAttributeRouting(routes);
         }
