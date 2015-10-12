@@ -15,6 +15,10 @@ namespace ContosoUniversity.Web
             Configure.DependencyResolver(container);
             Configure.Bundles(bundles);
             Configure.GlobalFilters(filters);
+            Configure.AntiForgeryTokens();
+
+            // remove X-AspNetMvc-Version header
+            MvcHandler.DisableMvcResponseHeader = true;
         }
     }
 }

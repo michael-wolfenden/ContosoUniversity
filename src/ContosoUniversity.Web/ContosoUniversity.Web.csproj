@@ -164,10 +164,12 @@
   <ItemGroup>
     <Content Include="500.html" />
     <Content Include="404.html" />
+    <Content Include="assets\vendor\jquery-2.1.4.js" />
     <Content Include="Features\Shared\shared.js" />
     <Content Include="Global.asax" />
-    <Content Include="Assets\vendor\reqwest.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GlobalAssemblyInfo.cs">
@@ -183,6 +185,7 @@
     <Compile Include="ConfigurationSettings\MinimumLogLevelSetting.cs" />
     <Compile Include="ConfigurationSettings\SeqServerUriSetting.cs" />
     <Compile Include="Configure\AspMvc.cs" />
+    <Compile Include="Configure\AntiForgeryTokens.cs" />
     <Compile Include="Configure\GlobalFilters.cs" />
     <Compile Include="Configure\Logging.cs" />
     <Compile Include="Configure\DependencyResolver.cs" />
