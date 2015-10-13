@@ -62,8 +62,7 @@ function Set-TargetResource
     .DESCRIPTION
     The Carbon_EnvironmentVariable resource will add, update, or remove environment variables. The environment variable is set/removed at both the computer *and* process level, so that the process applying the DSC configuration will have access to the variable in later resources.
 
-    .LINK
-    Get-EnvironmentVariable
+    `Carbon_EnvironmentVariable` is new in Carbon 2.0.
 
     .LINK
     Set-EnvironmentVariable

@@ -82,6 +82,11 @@ function Get-TargetResource
     Set-StrictMode -Version 'Latest'
 
     $rule = Get-FirewallRule -LiteralName $Name
+    if( $rule -is [object[]] )
+    {
+        Write-Error ('Found {0} firewall rules named ''{1}''.' -f $rule.Count,$Name)
+        return
+    }
     
     $resource = @{ 
                     'Action' = $Action;
@@ -138,6 +143,8 @@ function Set-TargetResource
     The `Carbon_FirewallRule` resource manages firewall rules. It uses the `netsh advfirewall firewall` command. Please see [Netsh AdvFirewall Firewall Commands](http://technet.microsoft.com/en-us/library/dd734783.aspx) or run `netsh advfirewall firewall set rule` for documentation on how to configure the firewall.
 
     When modifying existing rules, only properties you pass are updated/changed. All other properties are left as-is.
+
+    `Carbon_FirewallRule` is new in Carbon 2.0.
 
     .LINK
     Get-FirewallRule

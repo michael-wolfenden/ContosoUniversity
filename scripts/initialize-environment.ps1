@@ -1,3 +1,5 @@
+#Requires -Version 4
+
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $PSScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Definition
@@ -31,7 +33,7 @@ $httpPort  = 50930
 $httpsPort = 50931
 
 # //////////////////////////////////////////////////////////////////////
-# // INITIALIZE CERTIFICATES
+# // IMPORT CERTIFICATES
 # //////////////////////////////////////////////////////////////////////
 
 Write-Host "Importing $sslCertificateName into Local Computer\Personal store" -foregroundcolor yellow
@@ -58,15 +60,6 @@ $sslCertificate = Install-Certificate `
 Write-Host ">>> done" -foregroundcolor green
 Write-Host
 
-Write-Host "Setting SSL binding for thumbprint $($sslCertificate.Thumbprint) for port $httpsPort" -foregroundcolor yellow
-
-Set-SslCertificateBinding -ApplicationID ([Guid]::NewGuid()) `
-                          -Thumbprint $sslCertificate.Thumbprint `
-                          -Port $httpsPort
-
-Write-Host ">>> done" -foregroundcolor green
-Write-Host
-
 # //////////////////////////////////////////////////////////////////////
 # // INITIALIZE APPPOOL
 # //////////////////////////////////////////////////////////////////////
@@ -78,10 +71,13 @@ if (Test-IisAppPool -Name $appPoolName) {
 
 Write-Host "Creating application pool '$appPoolName'" -foregroundcolor yellow
 
-
 Install-IisAppPool -Name $appPoolName `
                    -ServiceAccount NetworkService `
                    -ManagedRuntimeVersion "v4.0"
+
+If (!(Test-IisAppPool -Name $appPoolName)) {
+  throw "Creating application pool failed !! "
+}
 
 Write-Host ">>> done" -foregroundcolor green
 Write-Host
@@ -97,8 +93,8 @@ if (Test-IisWebsite -Name $siteName) {
 
 Write-Host "Creating website '$siteName'" -foregroundcolor yellow
 
-$httpBinding = "http/*:$($httpPort):$($domain)"
-$httpsBinding = "https/*:$($httpsPort):$($domain)"
+$httpBinding = "http/*:$($httpPort):"
+$httpsBinding = "https/*:$($httpsPort):"
 
 Write-Host " - $httpBinding" -foregroundcolor yellow
 Write-Host " - $httpsBinding" -foregroundcolor yellow
@@ -108,5 +104,34 @@ Install-IisWebsite -Path $websitePath `
                    -Bindings ($httpBinding, $httpsBinding) `
                    -AppPoolName $appPoolName
 
+If (!(Test-IisWebsite -Name $siteName)) {
+  throw "Creating website failed !! "
+}
+
 Write-Host ">>> done" -foregroundcolor green
 Write-Host
+
+# //////////////////////////////////////////////////////////////////////
+# // SET SSL BINDINGS
+# //////////////////////////////////////////////////////////////////////
+
+Write-Host "Setting SSL binding for thumbprint $($sslCertificate.Thumbprint) for port $httpsPort" -foregroundcolor yellow
+
+Set-SslCertificateBinding -ApplicationID ([Guid]::NewGuid()) `
+                          -Thumbprint $sslCertificate.Thumbprint `
+                          -Port $httpsPort
+
+If (!(Test-SslCertificateBinding -Port $httpsPort)) {
+  throw "Setting SSL binding failed !! "
+}
+
+Write-Host ">>> done" -foregroundcolor green
+Write-Host
+
+Write-Host "========================================================================" -foregroundcolor yellow
+Write-Host ""
+Write-Host " Setup complete, you can now access the site at:"
+Write-Host ""
+Write-Host " https://$($domain):$($httpsPort)" -foregroundcolor green
+Write-Host ""
+Write-Host "========================================================================" -foregroundcolor yellow

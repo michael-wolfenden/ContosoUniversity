@@ -23,10 +23,14 @@ param(
 
 Set-StrictMode -Version 'Latest'
 
+# Keep cause this script is used by PowerShell 2.
+$PSScriptRoot = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
+
 Add-Type -AssemblyName 'System.Security'
 
-. (Join-Path -Path $PSScriptRoot -ChildPath '..\Cryptography\Protect-String.ps1' -Resolve)
-. (Join-Path -Path $PSScriptRoot -ChildPath '..\Cryptography\Unprotect-String.ps1' -Resolve)
+. (Join-Path -Path $PSScriptRoot -ChildPath '..\Functions\Use-CallerPreference.ps1' -Resolve)
+. (Join-Path -Path $PSScriptRoot -ChildPath '..\Functions\Protect-String.ps1' -Resolve)
+. (Join-Path -Path $PSScriptRoot -ChildPath '..\Functions\Unprotect-String.ps1' -Resolve)
 
 $string = Unprotect-String -ProtectedString $ProtectedString
 Protect-String -String $string -ForUser

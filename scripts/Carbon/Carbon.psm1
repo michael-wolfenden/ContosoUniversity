@@ -12,9 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#Requires -Version 3
+#Requires -Version 4
 
 $CarbonBinDir = Join-Path -Path $PSScriptRoot -ChildPath 'bin' -Resolve
+
+. (Join-Path -Path $PSScriptRoot -ChildPath 'Functions\Test-TypeDataMember.ps1' -Resolve)
+. (Join-Path -Path $PSScriptRoot -ChildPath 'Functions\Use-CallerPreference.ps1' -Resolve)
 
 # Active Directory
 
@@ -35,6 +38,26 @@ if( (Test-Path -Path $microsoftWebAdministrationPath -PathType Leaf) )
 {
     Add-Type -Path $microsoftWebAdministrationPath
     Add-Type -Path (Join-Path -Path $CarbonBinDir -ChildPath 'Carbon.Iis.dll' -Resolve)
+
+    if( -not (Test-TypeDataMember -TypeName 'Microsoft.Web.Administration.Site' -MemberName 'PhysicalPath') )
+    {
+        Update-TypeData -TypeName 'Microsoft.Web.Administration.Site' -MemberType ScriptProperty -MemberName 'PhysicalPath' -Value { 
+                $this.Applications |
+                    Where-Object { $_.Path -eq '/' } |
+                    Select-Object -ExpandProperty VirtualDirectories |
+                    Where-Object { $_.Path -eq '/' } |
+                    Select-Object -ExpandProperty PhysicalPath
+            }
+    }
+
+    if( -not (Test-TypeDataMember -TypeName 'Microsoft.Web.Administration.Application' -MemberName 'PhysicalPath') )
+    {
+        Update-TypeData -TypeName 'Microsoft.Web.Administration.Application' -MemberType ScriptProperty -MemberName 'PhysicalPath' -Value { 
+                $this.VirtualDirectories |
+                    Where-Object { $_.Path -eq '/' } |
+                    Select-Object -ExpandProperty PhysicalPath
+            }
+    }
 }
 
 # MSMQ
@@ -63,6 +86,62 @@ if( -not $useServerManager )
 $windowsFeaturesNotSupported = (-not ($useServerManager -or ($useWmi -and $useOCSetup) ))
 $supportNotFoundErrorMessage = 'Unable to find support for managing Windows features.  Couldn''t find servermanagercmd.exe, ocsetup.exe, or WMI support.'
 
+
+# Extended Type
+if( -not (Test-TypeDataMember -TypeName 'System.IO.FileInfo' -MemberName 'GetCarbonFileInfo') )
+{
+    Update-TypeData -TypeName 'System.IO.FileInfo' -MemberType ScriptMethod -MemberName 'GetCarbonFileInfo' -Value {
+        param(
+            [Parameter(Mandatory=$true)]
+            [string]
+            # The name of the Carbon file info property to get.
+            $Name
+        )
+
+        Set-StrictMode -Version 'Latest'
+
+        if( -not $this.Exists )
+        {
+            return
+        }
+
+        if( -not ($this | Get-Member -Name 'CarbonFileInfo') )
+        {
+            $this | Add-Member -MemberType NoteProperty -Name 'CarbonFileInfo' -Value (New-Object 'Carbon.IO.FileInfo' $this.FullName)
+        }
+
+        if( $this.CarbonFileInfo | Get-Member -Name $Name )
+        {
+            return $this.CarbonFileInfo.$Name
+        }
+    }
+}
+
+if( -not (Test-TypeDataMember -TypeName 'System.IO.FileInfo' -MemberName 'FileIndex') )
+{
+    Update-TypeData -TypeName 'System.IO.FileInfo' -MemberType ScriptProperty -MemberName 'FileIndex' -Value {
+        Set-StrictMode -Version 'Latest'
+        return $this.GetCarbonFileInfo( 'FileIndex' )
+    }
+}
+
+if( -not (Test-TypeDataMember -TypeName 'System.IO.FileInfo' -MemberName 'LinkCount') )
+{
+    Update-TypeData -TypeName 'System.IO.FileInfo' -MemberType ScriptProperty -MemberName 'LinkCount' -Value {
+        Set-StrictMode -Version 'Latest'
+        return $this.GetCarbonFileInfo( 'LinkCount' )
+    }
+}
+
+if( -not (Test-TypeDataMember -TypeName 'System.IO.FileInfo' -MemberName 'VolumeSerialNumber') )
+{
+    Update-TypeData -TypeName 'System.IO.FileInfo' -MemberType ScriptProperty -MemberName 'VolumeSerialNumber' -Value {
+        Set-StrictMode -Version 'Latest'
+        return $this.GetCarbonFileInfo( 'VolumeSerialNumber' )
+    }
+}
+
+
 $privateMembers = @{
                         'Add-IisServerManagerMember' = $true;
                         'Assert-WindowsFeatureFunctionsSupported' = $true;
@@ -71,12 +150,13 @@ $privateMembers = @{
                         'Invoke-ConsoleCommand' = $true;
                         'Resolve-WindowsFeatureName' = $true;
                         'Set-CryptoKeySecurity' = $true;
+                        'Use-CallerPreference' = $true;
+                        'Write-IisVerbose' = $true;
                    }
 
-$functionNames = Get-Item (Join-Path -Path $PSScriptRoot -ChildPath '*\*.ps1') | 
-                    Where-Object { $_.Directory.Name -ne 'bin' -and $_.Directory.Name -ne 'DscResources' } |
+$functionNames = Get-Item (Join-Path -Path $PSScriptRoot -ChildPath 'Functions\*.ps1') | 
                     ForEach-Object {
-                        Write-Verbose ("Importing sub-module {0}." -f $_.FullName)
+                        Write-Verbose ("Importing function {0}." -f $_.FullName)
                         . $_.FullName | Out-Null
                         $functionName = Split-Path -Leaf -Path $_.FullName
                         [IO.Path]::GetFileNameWithoutExtension( $functionName )

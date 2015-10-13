@@ -140,6 +140,8 @@ function Set-TargetResource
         
     Permissions are revoked when the `Ensure` property is set to `Absent`. *All* a user or group's permissions are revoked. You can't revoke part of a principal's access. If you want to revoke part of a principal's access, set the `Ensure` property to `Present` and the `Permissions` property to the list of properties you want the principal to have.
 
+    `Carbon_Permission` is new in Carbon 2.0.
+
     .LINK
     Get-Permission
 
@@ -307,8 +309,8 @@ function Test-TargetResource
     Set-StrictMode -Version 'Latest'
 
     $resource = Get-TargetResource -Identity $Identity -Path $Path
-    $desiredRights = $Permission -join ','
-    $currentRights = $resource.Permission -join ','
+    $desiredRights = ($Permission | Sort-Object) -join ','
+    $currentRights = ($resource.Permission | Sort-Object) -join ','
     
     if( $Ensure -eq 'Absent' )
     {

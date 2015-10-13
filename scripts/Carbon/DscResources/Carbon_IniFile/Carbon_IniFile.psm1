@@ -102,6 +102,8 @@ function Set-TargetResource
     .DESCRIPTION
     The `Carbon_IniFile` resource sets or removes settings from INI files.
 
+    `Carbon_IniFile` is new in Carbon 2.0.
+
     .LINK
     Remove-IniEntry
 
@@ -216,7 +218,7 @@ function Set-TargetResource
 
     if( -not (Test-Path -Path $Path -PathType Leaf) -and $Force )
     {
-        New-Item -Path $Path -ItemType 'File' -Force -Verbose:$VerbosePreference | Out-Null
+        New-Item -Path $Path -ItemType 'File' -Force | Out-Null
     }
 
     $fullName = $Name
