@@ -13,18 +13,18 @@ namespace ContosoUniversity.Web
 
         private static void RegisterCssBundles(BundleCollection bundles)
         {
-            bundles.Add(new StyleBundle("~/bundles/appcss")
+            bundles.Add(new StyleBundle("~/bundles/app-css")
                 .Include("~/assets/css/bootstrap.css")
             );
         }
 
         private static void RegisterJsBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/bundles/vendorjs")
+            bundles.Add(new ScriptBundle("~/bundles/vendor-js")
                 .Include("~/assets/js/jquery-2.1.4.js")
             );
 
-            bundles.Add(new ScriptBundle("~/bundles/appjs")
+            bundles.Add(new ScriptBundle("~/bundles/app-js")
                 .IncludeDirectory("~/Features/", "*.js", searchSubdirectories: true)
             );
         }

@@ -7,6 +7,8 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>@ViewBag.Title - Contoso University</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    @Styles.Render("~/bundles/app-css")
 </head>
 <body>
 
@@ -14,8 +16,8 @@
         @RenderBody()
     </div>
 
-    @Scripts.Render("~/bundles/vendorjs")
-    @Scripts.Render("~/bundles/appjs")
+    @Scripts.Render("~/bundles/vendor-js")
+    @Scripts.Render("~/bundles/app-js")
 
     <script>
     contosoUniversity.shared.initialise();
