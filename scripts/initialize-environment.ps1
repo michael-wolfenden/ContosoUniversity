@@ -29,9 +29,6 @@ $appPoolName = "ContosoUniversityAppPool"
 $sslCertificatePath = [IO.Path]::Combine($PSSCriptRoot, "..\certificates\", $sslCertificateName)
 $websitePath = [IO.Path]::Combine($PSSCriptRoot, "..\src\ContosoUniversity.Web")
 
-$httpPort  = 50930
-$httpsPort = 50931
-
 # //////////////////////////////////////////////////////////////////////
 # // IMPORT CERTIFICATES
 # //////////////////////////////////////////////////////////////////////
@@ -93,16 +90,17 @@ if (Test-IisWebsite -Name $siteName) {
 
 Write-Host "Creating website '$siteName'" -foregroundcolor yellow
 
-$httpBinding = "http/*:$($httpPort):"
-$httpsBinding = "https/*:$($httpsPort):"
+$httpBinding = "http/*:80:$($domain)"
+$httpsBinding = "https/*:443:$($domain)"
 
-Write-Host " - $httpBinding" -foregroundcolor yellow
-Write-Host " - $httpsBinding" -foregroundcolor yellow
+Write-Host " - http://$domain" -foregroundcolor yellow
+Write-Host " - https://$domain" -foregroundcolor yellow
 
 Install-IisWebsite -Path $websitePath `
                    -Name $siteName `
                    -Bindings ($httpBinding, $httpsBinding) `
-                   -AppPoolName $appPoolName
+                   -AppPoolName $appPoolName `
+                   -UseSNI
 
 If (!(Test-IisWebsite -Name $siteName)) {
   throw "Creating website failed !! "
@@ -115,23 +113,12 @@ Write-Host
 # // SET SSL BINDINGS
 # //////////////////////////////////////////////////////////////////////
 
-Write-Host "Setting SSL binding for thumbprint $($sslCertificate.Thumbprint) for port $httpsPort" -foregroundcolor yellow
+Write-Host "Setting SSL binding for thumbprint '$($sslCertificate.Thumbprint)' and site '$siteName'" -foregroundcolor yellow
 
-Set-SslCertificateBinding -ApplicationID ([Guid]::NewGuid()) `
-                          -Thumbprint $sslCertificate.Thumbprint `
-                          -Port $httpsPort
-
-If (!(Test-SslCertificateBinding -Port $httpsPort)) {
-  throw "Setting SSL binding failed !! "
-}
+Set-IisWebsiteSslCertificate  -SiteName $siteName `
+                              -Thumbprint $sslCertificate.Thumbprint `
+                              -ApplicationID ([Guid]::NewGuid()) `
+                              -Domain $domain
 
 Write-Host ">>> done" -foregroundcolor green
 Write-Host
-
-Write-Host "========================================================================" -foregroundcolor yellow
-Write-Host ""
-Write-Host " Setup complete, you can now access the site at:"
-Write-Host ""
-Write-Host " https://$($domain):$($httpsPort)" -foregroundcolor green
-Write-Host ""
-Write-Host "========================================================================" -foregroundcolor yellow

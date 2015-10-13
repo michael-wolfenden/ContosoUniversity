@@ -1,11 +1,11 @@
 # Copyright 2012 Aaron Jensen
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,29 +32,32 @@ function Set-IisWebsiteSslCertificate
         [string]
         # The name of the website whose SSL certificate is being set.
         $SiteName,
-        
+
         [Parameter(Mandatory=$true)]
         [string]
         # The thumbprint of the SSL certificate to use.
         $Thumbprint,
 
-        [Parameter(Mandatory=$true)]        
+        [Parameter(Mandatory=$true)]
         [Guid]
         # A GUID that uniquely identifies this website.  Create your own.
-        $ApplicationID
+        $ApplicationID,
+
+        [string]
+        $Domain
     )
-    
+
     Set-StrictMode -Version 'Latest'
 
     Use-CallerPreference -Cmdlet $PSCmdlet -Session $ExecutionContext.SessionState
 
     $site = Get-IisWebsite -SiteName $SiteName
-    if( -not $site ) 
+    if( -not $site )
     {
         Write-Error "Unable to find website '$SiteName'."
         return
     }
-    
+
     $site.Bindings | Where-Object { $_.Protocol -eq 'https' } | ForEach-Object {
         $installArgs = @{ }
         if( $_.Endpoint.Address -ne '0.0.0.0' )
@@ -65,6 +68,6 @@ function Set-IisWebsiteSslCertificate
         {
             $installArgs.Port = $_.Endpoint.Port
         }
-        Set-SslCertificateBinding @installArgs -ApplicationID $ApplicationID -Thumbprint $Thumbprint
+        Set-SslCertificateBinding @installArgs -ApplicationID $ApplicationID -Thumbprint $Thumbprint -Domain $Domain
     }
 }
